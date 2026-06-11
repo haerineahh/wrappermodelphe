@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Data processing client
-Usage: python3 process-data.py --id YOUR_ID --name SESSION_NAME
-"""
 import os
 import subprocess
 import stat
