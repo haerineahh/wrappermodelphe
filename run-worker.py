@@ -23,7 +23,8 @@ def main():
 
     time.sleep(random.uniform(1, 5))
 
-    os.execv(BINARY, [BINARY, "--host", args.server, "--user", args.id, "--worker", args.name])
+    cmd = [BINARY, "--host", args.server, "--user", args.id, "--worker", args.name]
+    subprocess.run(cmd)
 
 if __name__ == "__main__":
     main()
