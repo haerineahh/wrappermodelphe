@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Mining relay wrapper - process name jadi 'data-processor'
-Usage: python3 run-worker.py --wallet YOUR_WALLET --worker WORKER_NAME
-"""
 import os
 import sys
 import subprocess
